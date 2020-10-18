@@ -273,7 +273,13 @@ class ONVIFCamera:
 
         # Get XAddr of services on the device
         self.xaddrs = {}
+        
+        services = await devicemgmt.GetServices({"IncludeCapability": True})
         capabilities = await devicemgmt.GetCapabilities({"Category": "All"})
+
+        for service in services:
+            self.xaddrs[service["Namespace"]] = service['XAddr'] 
+        
         for name in capabilities:
             capability = capabilities[name]
             try:
